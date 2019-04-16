@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Player
   attr_accessor :name, :life_points, :max_life_points, :all_players
   @@all_players = []
@@ -19,7 +21,7 @@ class Player
 
   def gets_damage(dmg)
     (@life_points - dmg) < 0 ? @life_points = 0 : @life_points -= dmg
-    puts @life_points <= 0 ? "#{@name} is dead." : "#{@name} take #{dmg} damage. HP left : #{@life_points}/#{@max_life_points}"
+    puts @life_points <= 0 ? "#{@name} is dead.".colorize(:red) : "#{@name} take #{dmg} damage. HP left : #{@life_points}/#{@max_life_points}"
   end
 
   def is_dead?
@@ -32,8 +34,9 @@ class Player
 
   def attacks(player_to_attack)
     damage = compute_damage
-    puts player_to_attack.is_dead? ? "Stay cool with corpses man" : "#{self.name} attacks #{player_to_attack.name}. #{damage} damage inflicted"
+    puts player_to_attack.is_dead? ? "Stay cool with corpses man" : "#{self.name} attacks #{player_to_attack.name}. " + "#{damage} damage inflicted".colorize(:red)
     player_to_attack.gets_damage(damage)
+    sleep(3)
   end
 
   def compute_damage

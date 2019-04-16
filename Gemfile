@@ -4,3 +4,4 @@
   gem "rspec"
   gem "rubocop"
   gem "pry"
+  gem "colorize"

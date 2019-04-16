@@ -1,6 +1,7 @@
 require 'pry'
 require_relative 'player'
 require_relative 'human_player'
+require 'colorize'
 
 class Game
   attr_accessor :human_player, :enemies_in_sight, :enemies_left
@@ -21,14 +22,21 @@ class Game
     @human_player = HumanPlayer.new('Philippe Poutou')
   end
 
+  def hero_info
+    puts "#{@human_player.name.upcase} :            #{@human_player.life_points}/#{@human_player.max_life_points}".colorize(:red).on_black
+    puts "                      " + "Weapon lvl: #{@human_player.weapon_level}\n\n\n".colorize(:red).on_black
+  end
+
   def menu
     kill_player
-    puts "What do you wanna do ?\n\n"
-    puts "S - Search for a new weapon"
-    puts "H - Search for heal pack\n\n"
+    hero_info
+    puts "   " + "What do you wanna do ?\n\n".colorize(:black).on_white
+    puts "S -" + " Search for a new weapon"
+    puts "H -" + " Search for heal pack\n".colorize(:green)
     @enemies_in_sight.each_with_index do |enemy, index|
-      puts "#{index} - Attack #{enemy.name} (#{enemy.life_points}/#{enemy.max_life_points})"
+      puts "#{index} -" + " Attack #{enemy.name.upcase} (#{enemy.life_points}/#{enemy.max_life_points})".colorize(:red)
     end
+    puts "\n\n"
   end
 
   def menu_choice
@@ -44,6 +52,7 @@ class Game
       puts "Error"
       menu
     end
+    system("clear")
   end
 
   def throw_dice
@@ -59,26 +68,28 @@ class Game
   end
 
   def show_players
-    puts "#{@human_player.name.upcase} : #{@human_player.life_points}/#{@human_player.max_life_points} Weapon level: #{@human_player.weapon_level}"
+    puts "          " + "ENEMIS IN SIGHT :".colorize(:red).on_black
     @enemies_in_sight.each do |enemy|
-      puts "   -> #{enemy.name.upcase} (#{enemy.life_points}/#{enemy.max_life_points})"
+      puts "   -> " + "#{enemy.name.upcase}".colorize(:red) + " (#{enemy.life_points}/#{enemy.max_life_points})"
     end
+    sleep(5)
+    system("clear")
   end
 
   def new_enemies_in_sight
-    @enemies_left >= 10 ? invoke_new_enemies : "So many bourgeois !"
+    @enemies_left >= 10 ? invoke_new_enemies : "So many bourgeois !".colorize(:yellow).on_black
   end
 
   def invoke_new_enemies
     case throw_dice
     when 1
-      puts "All bourgeois are in sight !"
+      puts "          " + "All bourgeois are in sight !".colorize(:cyan).on_black
     when 2..4
       n_enemies_arrive(1)
-      puts "One more is incoming..."
+      puts "          " + "\nOne more is incoming...\n".colorize(:cyan).on_black
     when 5..6
       n_enemies_arrive(2)
-      puts "Careful ! Two enemies are coming !"
+      puts "          " + "Careful ! Two enemies are coming !".colorize(:cyan).on_black
     end
   end
 
@@ -109,8 +120,8 @@ end
 ##############
 
 # Willkommen !
+system("clear")
 puts <<EOF
-\n
     +--------------------------+
     |      Golden ballz        |
     |           VS             |
@@ -120,11 +131,37 @@ puts <<EOF
 EOF
 
 # User name the game and select Philippe Poutou <3
-puts "Name your hero :"
+print "Name your hero :".colorize(:black).on_white + "  > "
 game_name = gets.chomp
 system("clear")
-puts "Philippe POUTOU <3"
+puts "/!\\Miswriting detected /!\\".colorize(:yellow)
+sleep(0.5)
+puts "> Correcting errors..."
+sleep(0.2)
+puts "."
+sleep(0.15)
+puts "."
+sleep(0.30)
+puts "."
+sleep(0.05)
+puts "."
+sleep(0.40)
+puts "."
+sleep(0.25)
+puts "."
+sleep(0.25)
+puts "."
+sleep(0.75)
+puts "."
+sleep(1)
+print "Hero name : > "
+sleep(1)
+system("clear")
+puts "\n\n\n                " + "Philippe POUTOU".colorize(:magenta).on_black
 sleep(3)
+system("clear")
+puts "fullscreen maggle"
+sleep(0.75)
 system("clear")
 
 # Generate game
@@ -136,6 +173,9 @@ while game.is_stil_ongoing?
   game.show_players
   game.menu
   game.menu_choice
+  # sleep(3)
+  # system("clear")
+  puts "         " + "ENEMIS ARE HITING BACK !\n".colorize(:red).on_black
   game.enemies_attack
   game.new_enemies_in_sight
 end
